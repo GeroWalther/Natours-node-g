@@ -7,7 +7,7 @@ const AppError = require('./../utils/appError');
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
-  req.query.fields = 'name,price,ratingsAverage,summery,difficulty';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
   next();
 };
 
@@ -19,16 +19,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
     .paginate();
   const tours = await features.query;
 
-  // returns a query; GETS ALL TOURS FROM THE COLLECTION; find is to find all,  findOne for 1 and findById - shorthand for Model.findOne({ _id: req.params.id })
-  // same but with mongoose methods
-  // const tours = await Tour.find()
-  //   .where('duration')
-  //   .equals('5') // others are lte lt gt etc.
-  //   .where('difficulty')
-  //   .equals('easy');
-
-  //
-  ////// SEND RESPONSE
+  // SEND RESPONSE
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -40,7 +31,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 
 exports.getToursById = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
-  // same as: Tour.findOne({ _id: req.params.id })
+  // Tour.findOne({ _id: req.params.id })
 
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
